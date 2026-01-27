@@ -2,6 +2,7 @@ import { useRouter } from "expo-router";
 import { signInWithEmailAndPassword } from "firebase/auth";
 import { useState } from "react";
 import { Alert } from "react-native";
+import { auth } from "../../services/firebase";
 
 
 
