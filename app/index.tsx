@@ -1,12 +1,22 @@
-import { View, Text, StyleSheet } from 'react-native'
+import { View, Text, ActivityIndicator } from 'react-native'
 import React from 'react'
+import { Redirect } from 'expo-router'
+import { useAuth } from '@/context/AuthContext';
 
-export default function index() {
+export default function Index() {
+  const {user, loading} = useAuth();
+
+  if (loading) {
   return (
     <View className="flex-1 items-center justify-center bg-white">
-      <Text className="text-2xl font-bold text-blue-600">
-        StoreMate App 
-      </Text>
+      <ActivityIndicator size ="large"/>
     </View>
   );
+}
+
+if(!user){
+  return <Redirect href="/(auth)/login" />;
+}
+
+return <Redirect href="/(dashboard)/home" />;
 }
