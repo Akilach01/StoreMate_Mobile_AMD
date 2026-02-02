@@ -1,6 +1,7 @@
 import { getProducts } from "@/services/productService";
+import { router } from "expo-router";
 import { useEffect, useState } from "react";
-import { FlatList, Pressable, View } from "react-native";
+import { FlatList, Pressable, View, Text } from "react-native";
 
 
 
@@ -30,6 +31,39 @@ export default function productList() {
                data = {products}
                keyExtractor={(item) => item.id}
                 renderItem ={({item})=>(
+                    <View className="border-b border-gray-200 py-4 rounded">
+                        <Text className="text-lg font-medium">{item.name}</Text>
+                        <Text className="text-gray-600">price :{item.price}</Text>
+                         <Text className="text-gray-600">Qty :{item.quantity}</Text>
+
+
+                         <View className="flex-row justify-between mt-2">
+                            <Pressable
+                            onPress={()=>
+                                router.push('/products/edit/${item.id}')
+                            }
+                            >
+                            <Text className="text-blue-600">Edit</Text>
+                            </Pressable>
+
+                            <Pressable
+                            onPress={()=>{
+                                await deleteProduct(item.id);
+                                loadproducts();
+                            }}
+                            >
+                            <Text className="text-red-600">Delete</Text>
+                            </Pressable>
+                         </View>
+                    </View>
+                )}
+            />
+            </View>
+    );
+ }
+
+
+
 
 
 
