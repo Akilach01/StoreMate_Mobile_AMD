@@ -17,6 +17,16 @@ export default function Home(){
          Manage Products</Text>
         </Pressable>
 
+{/*profile section(later)*/}
+        <Pressable
+        className="bg-gray-200 p-4 rounded mb-4"
+        onPress={() => {}}
+      >
+        <Text className="text-center text-lg">
+          Profile (Coming Soon)
+        </Text>
+      </Pressable>
+
             <TouchableOpacity
                 onPress={() =>signOut(auth)}
                 className="mt-4 px-4 py-2 bg-red-500 rounded">
