@@ -1,4 +1,4 @@
-import {db} from "@/services/firebase";
+import {db} from "./firebase";
 import { addDoc, collection, deleteDoc, doc, getDocs, serverTimestamp, updateDoc } from "firebase/firestore";
 
 
