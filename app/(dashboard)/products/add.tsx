@@ -2,12 +2,38 @@ import { Pressable, TextInput, View, Text } from "react-native";
 import { useState } from "react";
 import { addProduct } from "@/services/productService";
 import { router } from "expo-router";
+import * as ImagePicker from "expo-image-picker";
+import { uploadImageAsync } from "@/services/imageService";
 
 
 export default function AddProduct(){
     const[name,setName]=useState("");
     const[price,setPrice]=useState("");
     const[quantity,setQuantity]=useState("");
+    const[image,setImage]=useState<string|null>(null);
+
+   const pickImage = async () => {
+      const result = await ImagePicker.launchImageLibraryAsync({
+        mediaTypes: ImagePicker.MediaTypeOptions.Images,
+        quality:0.7,
+        });
+        if (!result.canceled) {
+            setImage(result.assets[0].uri);
+        }
+    };
+
+    const takePhoto = async () => {
+        const permission = await ImagePicker.requestCameraPermissionsAsync();
+        if (!permission.granted) return;
+        const result = await ImagePicker.launchCameraAsync({
+            quality:0.7,
+        }); 
+        
+        if (!result.canceled) {
+            setImage(result.assets[0].uri);
+        }
+    };
+
 
     const handleSave = async()=>{
         await addProduct({name,price:Number(price),quantity:Number(quantity)});
