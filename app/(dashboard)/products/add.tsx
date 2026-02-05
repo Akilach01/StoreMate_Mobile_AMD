@@ -71,6 +71,17 @@ export default function AddProduct(){
                 onChangeText={setQuantity}
                 keyboardType="numeric"
             />
+            
+            <Pressable className="bg-gray-300 p-3 rounded" onPress={pickImage}>
+                <Text className="text-center">Pick Image from Gallery</Text>
+            </Pressable>
+            <Pressable className="bg-gray-300 p-3 rounded mt-2" onPress={takePhoto}>
+                <Text className="text-center">Take Photo</Text>
+            </Pressable>
+
+            {image &&(
+                <Text className="text-center mt-4">Image Selected</Text>
+            )}
 
             <Pressable
               className="bg-blue-600 rounded-lg p-3"
