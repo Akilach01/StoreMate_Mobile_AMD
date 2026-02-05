@@ -1,7 +1,7 @@
-import { getProducts } from "@/services/productService";
+import { deleteProduct, getProducts } from "@/services/productService";
 import { router } from "expo-router";
 import { useEffect, useState } from "react";
-import { FlatList, Pressable, View, Text } from "react-native";
+import { FlatList, Pressable, View, Text, Image } from "react-native";
 
 
 
@@ -23,7 +23,7 @@ export default function productList() {
 
           <Pressable
             className="bg-blue-600 rounded-lg p-3 mb-4"
-            onPress={() => router.push('/products/add')}>
+            onPress={() => router.push("/products/add")}>
             <Text className="text-white text-center font-semibold">Add New Product</Text>
             </Pressable>
 
@@ -32,6 +32,9 @@ export default function productList() {
                keyExtractor={(item) => item.id}
                 renderItem ={({item})=>(
                     <View className="border-b border-gray-200 py-4 rounded">
+                        {item.imageUrl && (
+                            <Image source={{ uri: item.imageUrl }} className="w-full h-40 rounded mb-2" resizeMode="cover"/>
+                        )}
                         <Text className="text-lg font-medium">{item.name}</Text>
                         <Text className="text-gray-600">price :{item.price}</Text>
                          <Text className="text-gray-600">Qty :{item.quantity}</Text>
@@ -40,14 +43,14 @@ export default function productList() {
                          <View className="flex-row justify-between mt-2">
                             <Pressable
                             onPress={()=>
-                                router.push('/products/edit/${item.id}')
+                                router.push(`/products/edit/${item.id}`)
                             }
                             >
                             <Text className="text-blue-600">Edit</Text>
                             </Pressable>
 
                             <Pressable
-                            onPress={()=>{
+                            onPress={async()=>{
                                 await deleteProduct(item.id);
                                 loadproducts();
                             }}
@@ -61,14 +64,3 @@ export default function productList() {
             </View>
     );
  }
-
-
-
-
-
-
-        </View>
-        
-    )
-    
-}
