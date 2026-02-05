@@ -36,7 +36,13 @@ export default function AddProduct(){
 
 
     const handleSave = async()=>{
-        await addProduct({name,price:Number(price),quantity:Number(quantity)});
+        let imageUrl = "";
+        if (image) {
+            imageUrl = await uploadImageAsync(image);
+            
+        }
+
+        await addProduct({name,price:Number(price),quantity:Number(quantity),imageUrl});
         router.back();
     };
 
