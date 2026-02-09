@@ -1,50 +1,100 @@
-# Welcome to your Expo app 👋
+# StoreMate 📦  
+*A Local Shop Product Catalog Mobile Application*
 
-This is an [Expo](https://expo.dev) project created with [`create-expo-app`](https://www.npmjs.com/package/create-expo-app).
+## 📱 Project Overview
+StoreMate is a mobile application developed as the **Advanced Mobile Development final project**.  
+It helps local shop owners manage their product catalog digitally with secure authentication and full CRUD functionality.
 
-## Get started
+The app is built using **React Native (Expo)** for the frontend and **Firebase** for backend services such as authentication, Firestore database, and image storage.
 
-1. Install dependencies
+---
 
-   ```bash
-   npm install
-   ```
+## 🚀 Features
+- User Authentication (Login & Register)
+- Product Management (Create, Read, Update, Delete)
+- Firebase Firestore integration
+- Image upload using device camera/gallery
+- Modern UI using Tailwind (NativeWind)
+- Expo Router based navigation
+- APK build using Expo EAS
 
-2. Start the app
+---
 
-   ```bash
-   npx expo start
-   ```
+## 🛠️ Tech Stack
+- **Frontend:** React Native (Expo)
+- **Navigation:** Expo Router
+- **Styling:** Tailwind CSS (NativeWind)
+- **Backend:** Firebase
+  - Firebase Authentication
+  - Firestore Database
+  - Firebase Storage
+- **Build Tool:** Expo EAS
 
-In the output, you'll find options to open the app in a
+---
 
-- [development build](https://docs.expo.dev/develop/development-builds/introduction/)
-- [Android emulator](https://docs.expo.dev/workflow/android-studio-emulator/)
-- [iOS simulator](https://docs.expo.dev/workflow/ios-simulator/)
-- [Expo Go](https://expo.dev/go), a limited sandbox for trying out app development with Expo
+## 📋 Prerequisites
+Make sure you have the following installed:
 
-You can start developing by editing the files inside the **app** directory. This project uses [file-based routing](https://docs.expo.dev/router/introduction).
+- Node.js (LTS recommended)
+- npm or yarn
+- Expo CLI
+- Expo Go app (on Android device)
+- Firebase project (with Auth, Firestore & Storage enabled)
 
-## Get a fresh project
+---
 
-When you're ready, run:
+## ⚙️ Installation & Setup
 
+### 1️⃣ Clone the repository
 ```bash
-npm run reset-project
-```
+git clone <your-github-repo-url>
+cd StoreMate
+2️⃣ Install dependencies
+npm install
+3️⃣ Firebase Configuration
 
-This command will move the starter code to the **app-example** directory and create a blank **app** directory where you can start developing.
+Create a Firebase project and enable:
 
-## Learn more
+Email/Password Authentication
+Firestore Database
+Firebase Storage
 
-To learn more about developing your project with Expo, look at the following resources:
+Update the Firebase config file:
+📁 services/firebase.ts
 
-- [Expo documentation](https://docs.expo.dev/): Learn fundamentals, or go into advanced topics with our [guides](https://docs.expo.dev/guides).
-- [Learn Expo tutorial](https://docs.expo.dev/tutorial/introduction/): Follow a step-by-step tutorial where you'll create a project that runs on Android, iOS, and the web.
+4️⃣ Run the app (Expo Go)
+npx expo start or npx expo start --tunnel
 
-## Join the community
+app/
+ ├── (auth)/
+ │   ├── login.tsx
+ │   └── register.tsx
+ ├── (dashboard)/
+ │   ├── home.tsx
+ │   └── products/
+ │       ├── index.tsx
+ │       ├── add.tsx
+ │       └── edit/[id].tsx
+ ├── _layout.tsx
+ └── index.tsx
 
-Join our community of developers creating universal apps.
+context/
+ └── AuthContext.tsx
 
-- [Expo on GitHub](https://github.com/expo/expo): View our open source platform and contribute.
-- [Discord community](https://chat.expo.dev): Chat with Expo users and ask questions.
+services/
+ ├── firebase.ts
+ └── productService.ts
+
+
+📦 APK Build (Expo EAS)
+
+To generate an APK file:
+
+npx expo prebuild
+npx expo run:android
+
+Or using EAS:
+
+npx expo install expo-dev-client
+npx expo prebuild
+npx expo run:android
