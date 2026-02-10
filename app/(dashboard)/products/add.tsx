@@ -4,6 +4,7 @@ import { addProduct } from "@/services/productService";
 import { router } from "expo-router";
 import * as ImagePicker from "expo-image-picker";
 import { uploadImageAsync } from "@/services/imageService";
+import { uploadToCloudinary } from "@/services/cloudinary";
 
 
 export default function AddProduct(){
@@ -37,8 +38,8 @@ export default function AddProduct(){
 
     const handleSave = async()=>{
         let imageUrl = "";
-        if (image) {
-            imageUrl = await uploadImageAsync(image);
+        if (imageUri) {
+            imageUrl = await uploadToCloudinary(imageUri);
             
         }
 
