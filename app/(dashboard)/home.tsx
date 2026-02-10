@@ -1,7 +1,7 @@
 import {  TouchableOpacity, View, Text, Pressable } from "react-native";
 import { auth } from "../../services/firebase";
 import { signOut } from "firebase/auth";
-import { router } from "@/.expo/types/router";
+import { router } from "expo-router";
 
 export default function Home(){
     return(

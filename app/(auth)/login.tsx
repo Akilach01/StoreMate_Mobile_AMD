@@ -63,11 +63,11 @@ export default function Login(){
         </Text>
       </TouchableOpacity>
 
-      <Text className="text-center"
-      Don't have an account ? {""}
-      <Link href="/(auth)/register" className="text-blue-500 font-bold">
-        Register
-      </Link>
+      <Text className="text-center">
+        Don't have an account?{" "}
+        <Link href="/(auth)/register" className="text-blue-500 font-bold">
+          Register
+        </Link>
       </Text>
     </View>
 
