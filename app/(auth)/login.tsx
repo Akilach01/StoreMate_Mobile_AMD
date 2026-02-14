@@ -3,6 +3,8 @@ import { signInWithEmailAndPassword } from "firebase/auth";
 import { useState } from "react";
 import { ActivityIndicator, Alert, Text, TextInput, TouchableOpacity, View } from "react-native";
 import { auth } from "../../services/firebase";
+import { Ionicons } from "@expo/vector-icons";
+
 
 export default function Login(){
     const router = useRouter();
@@ -58,87 +60,106 @@ export default function Login(){
         }
     };
 
-    return (
-        <View className="flex-1 bg-gradient-to-b from-blue-50 to-white">
-            <View className="flex-1 justify-center px-6 py-8">
-                {/* Logo/Header */}
-                <View className="mb-8">
-                    <Text className="text-4xl font-bold text-blue-600 text-center mb-3">
-                        StoreMate
-                    </Text>
-                    <Text className="text-gray-600 text-center text-base">
-                        Manage your products efficiently
-                    </Text>
-                </View>
+   return (
+    
+  <View className="flex-1 bg-gray-100">
+    <View className="bg-red-500 h-20 w-20 mb-4" />
 
-                {/* Email Input */}
-                <View className="mb-5">
-                    <Text className="text-gray-700 font-semibold mb-2">Email Address</Text>
-                    <TextInput
-                        placeholder="Enter your email"
-                        value={email}
-                        onChangeText={(text) => {
-                            setEmail(text);
-                            setEmailError("");
-                        }}
-                        className="border-2 border-gray-300 rounded-xl p-4 text-base bg-white"
-                        keyboardType="email-address"
-                        editable={!loading}
-                        placeholderTextColor="#999"
-                    />
-                    {emailError ? (
-                        <Text className="text-red-500 text-sm mt-1">{emailError}</Text>
-                    ) : null}
-                </View>
+    <View className="flex-1 justify-center px-6">
 
-                {/* Password Input */}
-                <View className="mb-6">
-                    <Text className="text-gray-700 font-semibold mb-2">Password</Text>
-                    <TextInput
-                        placeholder="Enter your password"
-                        value={password}
-                        onChangeText={(text) => {
-                            setPassword(text);
-                            setPasswordError("");
-                        }}
-                        className="border-2 border-gray-300 rounded-xl p-4 text-base bg-white"
-                        secureTextEntry={true}
-                        editable={!loading}
-                        placeholderTextColor="#999"
-                    />
-                    {passwordError ? (
-                        <Text className="text-red-500 text-sm mt-1">{passwordError}</Text>
-                    ) : null}
-                </View>
-
-                {/* Login Button */}
-                <TouchableOpacity
-                    onPress={handleLogin}
-                    disabled={loading}
-                    className={`rounded-xl p-4 mb-4 flex-row justify-center items-center ${
-                        loading ? "bg-blue-400" : "bg-blue-600"
-                    }`}
-                >
-                    {loading ? (
-                        <>
-                            <ActivityIndicator color="#fff" size="small" />
-                            <Text className="text-white font-bold text-lg ml-2">Logging in...</Text>
-                        </>
-                    ) : (
-                        <Text className="text-white font-bold text-lg">Login</Text>
-                    )}
-                </TouchableOpacity>
-
-                {/* Register Link */}
-                <View className="flex-row justify-center items-center">
-                    <Text className="text-gray-600">Don't have an account? </Text>
-                    <Link href="/(auth)/register" asChild>
-                        <TouchableOpacity>
-                            <Text className="text-blue-600 font-bold">Register</Text>
-                        </TouchableOpacity>
-                    </Link>
-                </View>
-            </View>
+      {/* Header */}
+      <View className="items-center mb-10">
+        <View className="bg-blue-600 rounded-full p-4 mb-4">
+          <Ionicons name="storefront-outline" size={32} color="white" />
         </View>
-    );
+        <Text className="text-3xl font-extrabold text-gray-900">StoreMate</Text>
+        <Text className="text-gray-500 mt-2 text-center">
+          Smart inventory management for your business
+        </Text>
+      </View>
+
+      {/* Card */}
+      <View className="bg-white rounded-2xl p-6 shadow-md">
+
+        {/* Email */}
+        <View className="mb-4">
+          <Text className="text-gray-700 font-semibold mb-2">Email</Text>
+          <View className="flex-row items-center border border-gray-300 rounded-xl px-4 bg-white">
+            <Ionicons name="mail-outline" size={20} color="#6B7280" />
+            <TextInput
+              className="flex-1 py-4 px-3 text-base"
+              placeholder="you@example.com"
+              value={email}
+              onChangeText={(text) => {
+                setEmail(text);
+                setEmailError("");
+              }}
+              keyboardType="email-address"
+              editable={!loading}
+              placeholderTextColor="#9CA3AF"
+            />
+          </View>
+          {emailError ? (
+            <Text className="text-red-500 text-sm mt-1">{emailError}</Text>
+          ) : null}
+        </View>
+
+        {/* Password */}
+        <View className="mb-6">
+          <Text className="text-gray-700 font-semibold mb-2">Password</Text>
+          <View className="flex-row items-center border border-gray-300 rounded-xl px-4 bg-white">
+            <Ionicons name="lock-closed-outline" size={20} color="#6B7280" />
+            <TextInput
+              className="flex-1 py-4 px-3 text-base"
+              placeholder="••••••••"
+              value={password}
+              onChangeText={(text) => {
+                setPassword(text);
+                setPasswordError("");
+              }}
+              secureTextEntry
+              editable={!loading}
+              placeholderTextColor="#9CA3AF"
+            />
+          </View>
+          {passwordError ? (
+            <Text className="text-red-500 text-sm mt-1">{passwordError}</Text>
+          ) : null}
+        </View>
+
+        {/* Login Button */}
+        <TouchableOpacity
+          onPress={handleLogin}
+          disabled={loading}
+          className={`rounded-xl py-4 flex-row justify-center items-center ${
+            loading ? "bg-blue-400" : "bg-blue-600"
+          }`}
+        >
+          {loading ? (
+            <>
+              <ActivityIndicator color="#fff" />
+              <Text className="text-white font-bold text-lg ml-2">
+                Signing in...
+              </Text>
+            </>
+          ) : (
+            <Text className="text-white font-bold text-lg">Sign In</Text>
+          )}
+        </TouchableOpacity>
+      </View>
+
+      {/* Footer */}
+      <View className="flex-row justify-center mt-6">
+        <Text className="text-gray-600">New to StoreMate? </Text>
+        <Link href="/(auth)/register" asChild>
+          <TouchableOpacity>
+            <Text className="text-blue-600 font-bold">Create account</Text>
+          </TouchableOpacity>
+        </Link>
+      </View>
+
+    </View>
+  </View>
+);
+
 }
