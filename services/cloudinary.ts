@@ -1,7 +1,7 @@
 import * as FileSystem from "expo-file-system";
 
-const CLOUD_NAME = "YOUR_CLOUD_NAME";
-const UPLOAD_PRESET = "YOUR_UPLOAD_PRESET";
+const CLOUD_NAME = "dqwjxtgbt";
+const UPLOAD_PRESET = "Storemate";
 
 export const uploadToCloudinary = async (imageUri: string) => {
   const base64 = await FileSystem.readAsStringAsync(imageUri, {
@@ -14,7 +14,7 @@ export const uploadToCloudinary = async (imageUri: string) => {
   };
 
   const res = await fetch(
-    `https://api.cloudinary.com/v1_1/${CLOUD_NAME}/image/upload`,
+    `https://api.cloudinary.com/v1_1/${dqwjxtgbt}/image/upload`,
     {
       method: "POST",
       headers: {

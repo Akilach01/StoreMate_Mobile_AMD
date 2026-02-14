@@ -21,6 +21,7 @@ export default function Login(){
 
         try {
             setLoading(true);
+            console.log("Trying login...");
             await signInWithEmailAndPassword(auth, email, password );
             router.replace("/(dashboard)/home");
         } catch (error:any){
