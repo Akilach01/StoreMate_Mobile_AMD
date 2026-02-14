@@ -1,4 +1,4 @@
-import { AuthProvider } from "@/context/AuthContext";
+import { AuthProvider } from "../context/AuthContext";
 import { Slot } from "expo-router";
 import { LogBox, StatusBar, View } from "react-native";
 import { SafeAreaProvider } from "react-native-safe-area-context";
@@ -7,10 +7,11 @@ import { SafeAreaProvider } from "react-native-safe-area-context";
 LogBox.ignoreLogs(['SafeAreaView has been deprecated']);
 
 export default function RootLayout(){
+     console.log("[RootLayout] Mounted");
     return(
         <SafeAreaProvider>
             <AuthProvider>
-                <View style={{flex: 1, backgroundColor: '#ffffff'}}>
+                <View style={{flex: 1, backgroundColor: '#fff'}}>
                     <StatusBar barStyle="dark-content" />
                     <Slot />
                 </View>
