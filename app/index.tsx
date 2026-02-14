@@ -1,13 +1,13 @@
-import { useAuth } from '../context/AuthContext';
 import { Redirect } from 'expo-router';
 import React, { useEffect } from 'react';
 import { ActivityIndicator, Text, View } from 'react-native';
+import { useAuth } from '../context/AuthContext';
 
 export default function Index() {
   const {user, loading} = useAuth();
 
   useEffect(() => {
-    console.log('[Index] State updated - loading:', loading, 'user:', user?.email || 'No user');
+    // Auth state updated
   }, [loading, user]);
 
   if (loading) {
@@ -20,10 +20,8 @@ export default function Index() {
   }
 
   if(!user){
-    console.log('[Index] No user, redirecting to login');
     return <Redirect href="/(auth)/login" />;
   }
 
-  console.log('[Index] User found, redirecting to dashboard');
   return <Redirect href="/(dashboard)/home" />;
 }

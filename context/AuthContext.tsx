@@ -16,15 +16,9 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     const [user, setUser] = useState<User | null>(null);
     const [loading, setLoading] = useState(true);
 
-    console.log('[AuthProvider] RENDERING - auth available:', !!auth);
-
     useEffect(() => {
-        console.log('[AuthProvider useEffect] STARTING');
-        console.log('[AuthProvider useEffect] Auth instance:', !!auth, 'Type:', typeof auth);
-
         // Instantly set to false if auth is not available
         if (!auth) {
-            console.error('[AuthProvider useEffect] AUTH IS NULL - setting loading to false immediately');
             setLoading(false);
             return;
         }
@@ -32,29 +26,24 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         // Flag to track if component is still mounted
         let isMounted = true;
 
-        // CRITICAL: Set immediate timeout to force loading to false
+        // Timeout to force loading to false
         const forceTimeout = setTimeout(() => {
             if (isMounted) {
-                console.log('[AuthProvider useEffect] FORCE TIMEOUT FIRED - setting loading to false');
                 setLoading(false);
             }
         }, 1500);
 
         try {
-            console.log('[AuthProvider useEffect] Setting up onAuthStateChanged');
-            
             const unsubscribe = onAuthStateChanged(
                 auth,
                 (currentUser) => {
                     if (isMounted) {
-                        console.log('[AuthProvider useEffect] Auth changed - user:', currentUser?.email || 'none');
                         setUser(currentUser);
                         setLoading(false);
                         clearTimeout(forceTimeout);
                     }
                 },
                 (error) => {
-                    console.error('[AuthProvider useEffect] Auth listener error:', error);
                     if (isMounted) {
                         setLoading(false);
                         clearTimeout(forceTimeout);
@@ -62,16 +51,12 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
                 }
             );
 
-            console.log('[AuthProvider useEffect] onAuthStateChanged subscribed');
-
             return () => {
                 isMounted = false;
                 clearTimeout(forceTimeout);
                 unsubscribe();
-                console.log('[AuthProvider useEffect] Cleanup called');
             };
         } catch (error) {
-            console.error('[AuthProvider useEffect] Exception:', error);
             if (isMounted) {
                 setLoading(false);
                 clearTimeout(forceTimeout);

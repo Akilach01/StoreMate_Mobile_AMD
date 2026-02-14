@@ -15,19 +15,14 @@ const firebaseConfig = {
   appId: "1:1018762947491:web:3e070b0c239da3ac078816"
 };
 
-console.log('[Firebase] Starting initialization');
-
 // Initialize Firebase app
 const app = initializeApp(firebaseConfig);
-console.log('[Firebase] App initialized');
 
 // Get Firestore
 export const db = getFirestore(app);
-console.log('[Firebase] Firestore ready');
 
 // Get Storage
 export const storage = getStorage(app);
-console.log('[Firebase] Storage ready');
 
 // Initialize Auth
 let authInstance: any = null;
@@ -36,17 +31,13 @@ try {
   authInstance = initializeAuth(app, {
     persistence: getReactNativePersistence(AsyncStorage),
   });
-  console.log('[Firebase] Auth initialized with persistence');
 } catch (error) {
-  console.warn('[Firebase] Auth with persistence failed, trying default:', error);
   try {
     authInstance = getAuth(app);
-    console.log('[Firebase] Auth obtained with getAuth');
   } catch (e) {
-    console.error('[Firebase] Auth initialization completely failed:', e);
+    // Auth initialization failed
   }
 }
 
 export const auth = authInstance;
-console.log('[Firebase] Export complete, auth available:', !!authInstance);
 
