@@ -153,7 +153,7 @@ export default function Login(){
         <Text className="text-gray-600">New to StoreMate? </Text>
         <Link href="/(auth)/register" asChild>
           <TouchableOpacity>
-            <Text className="text-blue-600 font-bold">Create account</Text>
+            <Text className="text-blue-600 font-bold">Create a account</Text>
           </TouchableOpacity>
         </Link>
       </View>

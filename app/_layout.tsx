@@ -1,3 +1,4 @@
+
 import { Slot } from "expo-router";
 import { LogBox, StatusBar, View } from "react-native";
 import { SafeAreaProvider } from "react-native-safe-area-context";
