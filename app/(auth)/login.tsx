@@ -63,8 +63,7 @@ export default function Login(){
    return (
     
   <View className="flex-1 bg-gray-100">
-    <View className="bg-red-500 h-20 w-20 mb-4" />
-
+    
     <View className="flex-1 justify-center px-6">
 
       {/* Header */}

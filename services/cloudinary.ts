@@ -33,17 +33,51 @@ import * as FileSystem from 'expo-file-system';
 const CLOUD_NAME = "dqwjxtgbt";
 const UPLOAD_PRESET = "Storemate";
 
-
 export const uploadToCloudinary = async (uri: string): Promise<string> => {
+  console.log('Starting upload for URI:', uri);
+  
+  // Method 1: Try FormData approach first
   try {
-    console.log('Starting upload for URI:', uri);
+    const formData = new FormData();
+    const filename = uri.split('/').pop() || 'upload.jpg';
     
-    // Check if file exists using the modern API
-    const fileInfo = await FileSystem.getInfoAsync(uri);
-    if (!fileInfo.exists) {
-      throw new Error('File does not exist');
-    }
+    formData.append('file', {
+      uri: uri,
+      type: 'image/jpeg',
+      name: filename,
+    } as any);
+    
+    formData.append('upload_preset', UPLOAD_PRESET!);
 
+    console.log('Trying FormData upload...');
+    
+    const response = await fetch(
+      `https://api.cloudinary.com/v1_1/${CLOUD_NAME}/image/upload`,
+      {
+        method: 'POST',
+        body: formData,
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        },
+      }
+    );
+
+    const data = await response.json();
+    
+    if (response.ok) {
+      console.log('FormData upload successful, URL:', data.secure_url);
+      return data.secure_url;
+    }
+    
+    console.log('FormData upload failed, trying base64 method...');
+  } catch (formDataError) {
+    console.log('FormData error, trying base64 method...', formDataError);
+  }
+  
+  // Method 2: Try base64 approach as fallback
+  try {
+    console.log('Trying base64 upload...');
+    
     // Read the file as base64
     const base64 = await FileSystem.readAsStringAsync(uri, {
       encoding: FileSystem.EncodingType.Base64,
@@ -54,9 +88,6 @@ export const uploadToCloudinary = async (uri: string): Promise<string> => {
     formData.append('file', `data:image/jpeg;base64,${base64}`);
     formData.append('upload_preset', UPLOAD_PRESET!);
     
-    console.log('Uploading to Cloudinary...');
-    
-    // Upload to Cloudinary
     const response = await fetch(
       `https://api.cloudinary.com/v1_1/${CLOUD_NAME}/image/upload`,
       {
@@ -68,14 +99,13 @@ export const uploadToCloudinary = async (uri: string): Promise<string> => {
     const data = await response.json();
     
     if (!response.ok) {
-      console.error('Cloudinary error response:', data);
       throw new Error(data.error?.message || 'Upload failed');
     }
 
-    console.log('Upload successful, URL:', data.secure_url);
+    console.log('Base64 upload successful, URL:', data.secure_url);
     return data.secure_url;
-  } catch (error) {
-    console.error('Error uploading to Cloudinary:', error);
-    throw error;
+  } catch (base64Error) {
+    console.error('Both upload methods failed:', base64Error);
+    throw base64Error;
   }
 };

@@ -93,12 +93,15 @@ export default function AddProduct() {
       let imageUrl = "";
       if (imageUri) {
         try {
+           console.log("Attempting to upload image...");
           imageUrl = await uploadToCloudinary(imageUri);
+           console.log("Image uploaded successfully:", imageUrl);
         } catch (uploadError) {
           console.error("Image upload failed:", uploadError);
           Alert.alert(
             "Warning",
             "Image upload failed but product will be saved without image"
+            
           );
           // Continue without image
         }
@@ -158,7 +161,7 @@ export default function AddProduct() {
           onPress={pickImage}
           disabled={loading}
         >
-          <Text className="text-center">📷 Gallery</Text>
+          <Text className="text-center">📷 Pick From Gallery</Text>
         </Pressable>
 
         <Pressable 
@@ -166,7 +169,7 @@ export default function AddProduct() {
           onPress={takePhoto}
           disabled={loading}
         >
-          <Text className="text-center">📸 Camera</Text>
+          <Text className="text-center">📸 take a photo</Text>
         </Pressable>
       </View>
 
