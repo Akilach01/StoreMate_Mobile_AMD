@@ -1,29 +1,81 @@
-import * as FileSystem from "expo-file-system";
+// import * as FileSystem from "expo-file-system";
+
+// const CLOUD_NAME = "dqwjxtgbt";
+// const UPLOAD_PRESET = "Storemate";
+
+// export const uploadToCloudinary = async (imageUri: string) => {
+//   const base64 = await FileSystem.readAsStringAsync(imageUri, {
+//     encoding: FileSystem.EncodingType.Base64,
+//   });
+
+//   const data = {
+//     file: `data:image/jpeg;base64,${base64}`,
+//     upload_preset: UPLOAD_PRESET,
+//   };
+
+//   const res = await fetch(
+//     `https://api.cloudinary.com/v1_1/${dqwjxtgbt}/image/upload`,
+//     {
+//       method: "POST",
+//       headers: {
+//         "Content-Type": "application/json",
+//       },
+//       body: JSON.stringify(data),
+//     }
+//   );
+
+//   const json = await res.json();
+//   return json.secure_url as string;
+// };
+
+import * as FileSystem from 'expo-file-system';
 
 const CLOUD_NAME = "dqwjxtgbt";
 const UPLOAD_PRESET = "Storemate";
 
-export const uploadToCloudinary = async (imageUri: string) => {
-  const base64 = await FileSystem.readAsStringAsync(imageUri, {
-    encoding: FileSystem.EncodingType.Base64,
-  });
 
-  const data = {
-    file: `data:image/jpeg;base64,${base64}`,
-    upload_preset: UPLOAD_PRESET,
-  };
-
-  const res = await fetch(
-    `https://api.cloudinary.com/v1_1/${dqwjxtgbt}/image/upload`,
-    {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(data),
+export const uploadToCloudinary = async (uri: string): Promise<string> => {
+  try {
+    console.log('Starting upload for URI:', uri);
+    
+    // Check if file exists using the modern API
+    const fileInfo = await FileSystem.getInfoAsync(uri);
+    if (!fileInfo.exists) {
+      throw new Error('File does not exist');
     }
-  );
 
-  const json = await res.json();
-  return json.secure_url as string;
+    // Read the file as base64
+    const base64 = await FileSystem.readAsStringAsync(uri, {
+      encoding: FileSystem.EncodingType.Base64,
+    });
+
+    // Create form data
+    const formData = new FormData();
+    formData.append('file', `data:image/jpeg;base64,${base64}`);
+    formData.append('upload_preset', UPLOAD_PRESET!);
+    
+    console.log('Uploading to Cloudinary...');
+    
+    // Upload to Cloudinary
+    const response = await fetch(
+      `https://api.cloudinary.com/v1_1/${CLOUD_NAME}/image/upload`,
+      {
+        method: 'POST',
+        body: formData,
+      }
+    );
+
+    const data = await response.json();
+    
+    if (!response.ok) {
+      console.error('Cloudinary error response:', data);
+      throw new Error(data.error?.message || 'Upload failed');
+    }
+
+    console.log('Upload successful, URL:', data.secure_url);
+    return data.secure_url;
+  } catch (error) {
+    console.error('Error uploading to Cloudinary:', error);
+    throw error;
+  }
 };

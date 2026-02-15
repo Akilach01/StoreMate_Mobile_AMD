@@ -1,4 +1,4 @@
-import { Pressable, TextInput, View, Text, Image, ActivityIndicator } from "react-native";
+import { Pressable, TextInput, View, Text, Image, ActivityIndicator, Alert } from "react-native";
 import { useState } from "react";
 import { addProduct } from "@/services/productService";
 import { router } from "expo-router";
@@ -12,36 +12,78 @@ export default function AddProduct() {
   const [imageUri, setImageUri] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
 
-  //  Pick from gallery
+  // Pick from gallery
   const pickImage = async () => {
-    const result = await ImagePicker.launchImageLibraryAsync({
-      mediaTypes: ImagePicker.MediaTypeOptions.Images,
-      quality: 0.7,
-    });
+    try {
+      const permission = await ImagePicker.requestMediaLibraryPermissionsAsync();
+      if (!permission.granted) {
+        Alert.alert("Permission needed", "Please grant permission to access your photos");
+        return;
+      }
 
-    if (!result.canceled) {
-      setImageUri(result.assets[0].uri);
+      const result = await ImagePicker.launchImageLibraryAsync({
+        mediaTypes: ['images'],
+        quality: 0.7,
+        allowsEditing: true,
+      });
+
+      if (!result.canceled) {
+        setImageUri(result.assets[0].uri);
+      }
+    } catch (error) {
+      console.error("Error picking image:", error);
+      Alert.alert("Error", "Failed to pick image");
     }
   };
 
-  //  Take photo
+  // Take photo
   const takePhoto = async () => {
-    const permission = await ImagePicker.requestCameraPermissionsAsync();
-    if (!permission.granted) return;
+    try {
+      const permission = await ImagePicker.requestCameraPermissionsAsync();
+      if (!permission.granted) {
+        Alert.alert("Permission needed", "Please grant camera permission");
+        return;
+      }
 
-    const result = await ImagePicker.launchCameraAsync({
-      quality: 0.7,
-    });
+      const result = await ImagePicker.launchCameraAsync({
+        quality: 0.7,
+        allowsEditing: true,
+      });
 
-    if (!result.canceled) {
-      setImageUri(result.assets[0].uri);
+      if (!result.canceled) {
+        setImageUri(result.assets[0].uri);
+      }
+    } catch (error) {
+      console.error("Error taking photo:", error);
+      Alert.alert("Error", "Failed to take photo");
     }
   };
 
-  //  Save product
+  // Save product
   const handleSave = async () => {
-    if (!name || !price || !quantity) {
-      alert("Please fill all fields");
+    // Validation
+    if (!name.trim()) {
+      Alert.alert("Validation Error", "Please enter product name");
+      return;
+    }
+    if (!price.trim()) {
+      Alert.alert("Validation Error", "Please enter price");
+      return;
+    }
+    if (!quantity.trim()) {
+      Alert.alert("Validation Error", "Please enter quantity");
+      return;
+    }
+
+    const priceNum = Number(price);
+    const quantityNum = Number(quantity);
+
+    if (isNaN(priceNum) || priceNum <= 0) {
+      Alert.alert("Validation Error", "Please enter a valid price");
+      return;
+    }
+    if (isNaN(quantityNum) || quantityNum < 0) {
+      Alert.alert("Validation Error", "Please enter a valid quantity");
       return;
     }
 
@@ -50,20 +92,31 @@ export default function AddProduct() {
 
       let imageUrl = "";
       if (imageUri) {
-        imageUrl = await uploadToCloudinary(imageUri);
+        try {
+          imageUrl = await uploadToCloudinary(imageUri);
+        } catch (uploadError) {
+          console.error("Image upload failed:", uploadError);
+          Alert.alert(
+            "Warning",
+            "Image upload failed but product will be saved without image"
+          );
+          // Continue without image
+        }
       }
 
       await addProduct({
-        name,
-        price: Number(price),
-        quantity: Number(quantity),
+        name: name.trim(),
+        price: priceNum,
+        quantity: quantityNum,
         imageUrl,
       });
 
-      router.back();
+      Alert.alert("Success", "Product added successfully", [
+        { text: "OK", onPress: () => router.back() }
+      ]);
     } catch (err) {
       console.error("Add product failed:", err);
-      alert("Failed to add product");
+      Alert.alert("Error", "Failed to add product. Please try again.");
     } finally {
       setLoading(false);
     }
@@ -74,53 +127,77 @@ export default function AddProduct() {
       <Text className="text-2xl font-bold mb-4">Add New Product</Text>
 
       <TextInput
-        className="border border-gray-300 rounded p-2 mb-4"
+        className="border border-gray-300 rounded-lg p-3 mb-4"
         placeholder="Product Name"
         value={name}
         onChangeText={setName}
+        editable={!loading}
       />
 
       <TextInput
-        className="border border-gray-300 rounded p-2 mb-4"
+        className="border border-gray-300 rounded-lg p-3 mb-4"
         placeholder="Price"
         value={price}
         onChangeText={setPrice}
         keyboardType="numeric"
+        editable={!loading}
       />
 
       <TextInput
-        className="border border-gray-300 rounded p-2 mb-4"
+        className="border border-gray-300 rounded-lg p-3 mb-4"
         placeholder="Quantity"
         value={quantity}
         onChangeText={setQuantity}
         keyboardType="numeric"
+        editable={!loading}
       />
 
-      <Pressable className="bg-gray-300 p-3 rounded mb-2" onPress={pickImage}>
-        <Text className="text-center">Pick Image from Gallery</Text>
-      </Pressable>
+      <View className="flex-row gap-2 mb-4">
+        <Pressable 
+          className="flex-1 bg-gray-200 p-3 rounded-lg" 
+          onPress={pickImage}
+          disabled={loading}
+        >
+          <Text className="text-center">📷 Gallery</Text>
+        </Pressable>
 
-      <Pressable className="bg-gray-300 p-3 rounded" onPress={takePhoto}>
-        <Text className="text-center">Take Photo</Text>
-      </Pressable>
+        <Pressable 
+          className="flex-1 bg-gray-200 p-3 rounded-lg" 
+          onPress={takePhoto}
+          disabled={loading}
+        >
+          <Text className="text-center">📸 Camera</Text>
+        </Pressable>
+      </View>
 
       {imageUri && (
-        <Image
-          source={{ uri: imageUri }}
-          className="w-full h-40 mt-4 rounded"
-          resizeMode="cover"
-        />
+        <View className="mb-4 relative">
+          <Image
+            source={{ uri: imageUri }}
+            className="w-full h-48 rounded-lg"
+            resizeMode="cover"
+          />
+          <Pressable 
+            className="absolute top-2 right-2 bg-red-500 rounded-full p-2"
+            onPress={() => setImageUri(null)}
+          >
+            <Text className="text-white">✕</Text>
+          </Pressable>
+        </View>
       )}
 
       <Pressable
-        className="bg-blue-600 rounded-lg p-3 mt-6"
+        className={`rounded-lg p-4 ${loading ? 'bg-blue-400' : 'bg-blue-600'}`}
         onPress={handleSave}
         disabled={loading}
       >
         {loading ? (
-          <ActivityIndicator color="#fff" />
+          <View className="flex-row justify-center items-center">
+            <ActivityIndicator color="#fff" />
+            <Text className="text-white ml-2 font-semibold">Saving...</Text>
+          </View>
         ) : (
-          <Text className="text-white text-center font-semibold">
+          <Text className="text-white text-center font-semibold text-lg">
             Save Product
           </Text>
         )}
