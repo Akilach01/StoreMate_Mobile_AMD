@@ -71,6 +71,14 @@ export default function Home() {
             maximumFractionDigits: 2,
         }).format(value).replace('LKR', 'Rs.');
     };
+     const formatCompactLKR = (value: number) => {
+        if (value >= 1000000) {
+            return `Rs. ${(value / 1000000).toFixed(1)}M`;
+        } else if (value >= 1000) {
+            return `Rs. ${(value / 1000).toFixed(1)}K`;
+        }
+        return formatLKR(value);
+    };
 
     return (
         <View className="flex-1 bg-white">
@@ -81,7 +89,8 @@ export default function Home() {
             </View>
 
             {/* Main Content - Using ScrollView */}
-            <ScrollView className="flex-1 px-6 py-6" showsVerticalScrollIndicator={false}>
+            <ScrollView className="flex-1 px-6 py-6" showsVerticalScrollIndicator={false}
+                 contentContainerStyle={{ paddingBottom: 30 }}>
                 {/* Stats cards - Reduced gap between cards */}
                 <View className="flex-row justify-between mb-6">
                     <View className="bg-gradient-to-r from-blue-50 to-blue-100 flex-1 rounded-xl p-4 mr-2">
@@ -97,8 +106,13 @@ export default function Home() {
                         {loading ? (
                             <ActivityIndicator size="small" color="#10B981" className="mt-2" />
                         ) : (
-                            <Text className="text-green-600 text-3xl font-bold mt-2">
-                                {formatLKR(totalValue)}
+                            <Text 
+                                className="text-green-600 font-bold mt-2" 
+                                numberOfLines={1} 
+                                adjustsFontSizeToFit
+                                style={{ fontSize: totalValue > 100000 ? 24 : 30 }}
+                            >
+                                {formatCompactLKR(totalValue)}
                             </Text>
                         )}
                     </View>
@@ -193,15 +207,15 @@ export default function Home() {
                     </Pressable>
                 </View>
 
-                {/* Sign Out Button */}
-                <View className="mt-4 mb-8">
-                    <TouchableOpacity
-                        onPress={handleSignOut}
-                        className="bg-red-600 rounded-xl p-4 flex-row justify-center items-center"
-                    >
-                        <Text className="text-white text-center font-bold text-base">Sign Out</Text>
-                    </TouchableOpacity>
-                </View>
+                {/* Sign Out Button - Added more bottom padding */}
+             <View className="mt-6 mb-10">
+                <TouchableOpacity
+                   onPress={handleSignOut}
+                    className="bg-red-600 rounded-xl p-4 flex-row justify-center items-center"
+                  >
+                    <Text className="text-white text-center font-bold text-base">Sign Out</Text>
+                 </TouchableOpacity>
+              </View>
             </ScrollView>
         </View>
     );

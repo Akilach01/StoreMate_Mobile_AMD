@@ -126,7 +126,8 @@ export default function AddProduct() {
   };
 
   return (
-    <View className="p-4 bg-white flex-1">
+    <View className=" bg-white flex-1">
+      <View className="flex-1 justify-center px-6 -mt-10">
       <Text className="text-2xl font-bold mb-4">Add New Product</Text>
 
       <TextInput
@@ -205,6 +206,7 @@ export default function AddProduct() {
           </Text>
         )}
       </Pressable>
+    </View>
     </View>
   );
 }

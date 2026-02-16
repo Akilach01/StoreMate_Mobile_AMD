@@ -144,7 +144,7 @@ export default function productList() {
                                     <View className="flex-row justify-end space-x-2 gap-2">
                                         {/* Edit Button - Small */}
                                         <Pressable
-                                            onPress={() => router.push(`/(dashboard)/products/${item.id}`)}
+                                            onPress={() => router.push(`/(dashboard)/products/edit/${item.id}`)}
                                             className="bg-blue-50 px-4 py-2 rounded-lg flex-row items-center"
                                         >
                                             <Text className="text-blue-600 mr-1">✏️</Text>
