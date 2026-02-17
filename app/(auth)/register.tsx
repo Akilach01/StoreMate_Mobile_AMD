@@ -159,7 +159,7 @@ export default function Register() {
                         {confirmPasswordError ? (
                             <Text className="text-red-500 text-sm mt-1">{confirmPasswordError}</Text>
                         ) : null}
-                    </View>r
+                    </View>
 
                     {/* Register Button - matching login UI style */}
                     <TouchableOpacity

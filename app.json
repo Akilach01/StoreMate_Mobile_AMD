@@ -8,7 +8,7 @@
       "ios"
     ],
     "orientation": "portrait",
-    "icon": "./assets/images/icon.png",
+    "icon": "./assets/images/StoreMate_icon.png",
     "scheme": "storemate",
     "userInterfaceStyle": "automatic",
     "newArchEnabled": true,
