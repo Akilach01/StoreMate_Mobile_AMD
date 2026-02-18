@@ -98,3 +98,7 @@ Or using EAS:
 npx expo install expo-dev-client
 npx expo prebuild
 npx expo run:android
+
+
+Download APK -🤖 Open this link on your Android devices to install the app
+https://expo.dev/accounts/akilach/projects/StoreMate/builds/7f2ecad7-a274-4cb8-9fe3-cb63f92552b7
